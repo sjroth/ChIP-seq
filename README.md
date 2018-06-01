@@ -16,7 +16,8 @@ cut -f1,2 GENOME.fa.fai > GENOME.chrom.sizes
 cp GENOME.chrom.sizes PARENT_DIRECTORY/data/chrom.sizes
 
 bowtie2-build --threads NUM_THREADS GENOME.fa GENOME
-cp -p GENOME.* PARENT_DIRECTORY/data/bowtie2_reference/
+mkdir PARENT_DIRECTORY/data/bowtie_index/
+cp GENOME.* PARENT_DIRECTORY/data/bowtie_index/
 ```
 After creating the Bowtie2 index and copying it, you have to rename each of the files by changing their prefix to idx. This may be updated for flexibility in the future (perhaps a config command with a Bowtie2 index). Here's an example for an hg38 prefix:
 ```
@@ -47,6 +48,11 @@ Do this inside the directory and it will generate the chipseq.simg file. This ta
 ```
 scp chipseq.simg PARENT_DIRECTORY
 ```
+Once you have the simg file, do a dry run in order to test that everything is in the right place.
+```
+singularity run --bind data/:/scif/data chipseq.simg run snakemake '-n'
+```
+This will deposit the config file in your data folder so that you can edit it with the shell.
 
 ## Running the pipeline
 It is recommended that you run this pipeline outside the Singularity environment. You also need to specify the number of cpus to use on this job. With the current setting, the maximum is 50. Here is how you run the pipeline:
