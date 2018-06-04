@@ -26,7 +26,8 @@ mv hg38.1.bt2 idx.1.bt2
 Do this for the files in the reference folder.
 
 ## Getting Started
-There is only one field in the config file (config.yaml) to alter: peak_cmds. For this use customize peak finding as done by HOMER. For more info, check out the [HOMER Peak finding documentation](http://homer.ucsd.edu/homer/ngs/peaks.html). One of the most common things to change is the peak style. For example, for histone data, the following style is recommend:
+There are two fields in the config file (config.yaml) to alter: peak_cmds and paired_end. 
+For peak_cmds use customize peak finding as done by HOMER. For more info, check out the [HOMER Peak finding documentation](http://homer.ucsd.edu/homer/ngs/peaks.html). One of the most common things to change is the peak style. For example, for histone data, the following style is recommend:
 ```
 peak_cmds: -style histone
 ```
@@ -39,6 +40,11 @@ To include the input into peak finding, you would include the following flag in 
 peak_cmds: -style histone -i /scif/data/INPUT_TAG_DIRECTORY
 ```
 The location "/scif/data/" is essential. Otherwise, this will NOT work.
+
+The other option is to specify whether the raw files are paired end or not. Set this as True or False. For example, for paired-end data, do the following:
+```
+paired_end: True
+```
 
 The second part of this is generating the Singularity simg file. Use the Singularity manual for installation. It is required that you do this on a computer where you have sudo privileges and after you alter your config file. The command is simple:
 ```

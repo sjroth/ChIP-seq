@@ -1,24 +1,34 @@
 configfile: "config.yaml"
 workdir: "/scif/data"
 
-SAMPLES, = glob_wildcards("raw_data/{sample}_R1.fastq.gz")
+SAMPLES,PAIR_ID = glob_wildcards("raw_data/{sample}_{pair_id}.fastq.gz")
+SAMPLES = list(set(SAMPLES))
 
 rule all:
     input:
         expand("tag_directories/{sample}/track_info.txt",sample=SAMPLES),
         expand("tag_directories/{sample}/peaks.txt",sample=SAMPLES)
 
+def inputs(wildcards):
+    if (config["paired_end"]):
+        return expand("raw_data/{reads}_{strand}.fastq.gz", strand=["R1", "R2"], reads=wildcards.reads)
+    else:
+        return expand("raw_data/{reads}_R1.fastq.gz", reads=wildcards.reads)
+
 rule bowtie2_map:
     input:
-        "raw_data/{sample}_R1.fastq.gz"
+        inputs
     output:
-        "aligned_files/{sample}.sam"
+        "aligned_files/{reads}.sam"
     params:
         "bowtie_index/idx"
     threads:
         50
-    shell:
-        "scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} $SCIF_DATA/{input} > $SCIF_DATA/{output}'"
+    run:
+        if config["paired_end"]:
+            shell("scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} -1 $SCIF_DATA/{input[0]} -2 $SCIF_DATA/{input[1]} > $SCIF_DATA/{output}'")
+        else:
+            shell("scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} $SCIF_DATA/{input} > $SCIF_DATA/{output}'")
 
 rule sort_sam:
     input:
