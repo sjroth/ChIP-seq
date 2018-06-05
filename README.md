@@ -29,9 +29,9 @@ Do this for the files in the reference folder.
 There are three fields in the config file (config.yaml) to alter: tag_dir_cmds, peak_cmds and paired_end. 
 For tag_dir_cmds, this will allow you to customize your HOMER tag directories. Check out the [HOMER Tag Directory documentation](http://homer.ucsd.edu/homer/ngs/tagDir.html) Note: if you want to look at genome characteristics such as GC content add something like the following:
 ```
-tag_dir_cmds: -genome PATH_TO_FASTA -checkGC
+tag_dir_cmds: -genome /scif/data/GENOME.FA-checkGC
 ```
-It is important to specify your path as this version of the pipeline does not load the HOMER version of the genome. This is due to an onerous amount of space required for constructing the Singularity container.
+It is important to specify a fasta in your directory in this version of the pipeline does not load the HOMER version of the genome. This is due to an onerous amount of space required for constructing the Singularity container.
 
 For peak_cmds use customize peak finding as done by HOMER. For more info, check out the [HOMER Peak finding documentation](http://homer.ucsd.edu/homer/ngs/peaks.html). One of the most common things to change is the peak style. For example, for histone data, the following style is recommend:
 ```
