@@ -48,8 +48,10 @@ rule make_tag_directory:
         "aligned_files/{sample}.sorted.bam"
     output:
         "tag_directories/{sample}"
+    params:
+        config["tag_dir_cmds"]
     shell:
-        "scif run makeTagDirectory '$SCIF_DATA/{output} $SCIF_DATA/{input}'"
+        "scif run makeTagDirectory '$SCIF_DATA/{output} {params} $SCIF_DATA/{input}'"
 
 rule make_bigwig:
     input:
