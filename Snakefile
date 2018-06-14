@@ -26,7 +26,10 @@ rule bowtie2_map:
         50
     run:
         if config["paired_end"]:
-            shell("scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} -1 $SCIF_DATA/{input[0]} -2 $SCIF_DATA/{input[1]} > $SCIF_DATA/{output}'")
+            shell("""
+            scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} -1 $SCIF_DATA/{input[0]} -2 $SCIF_DATA/{input[1]} > \
+            $SCIF_DATA/{output}'
+            """)
         else:
             shell("scif run bowtie2 '-p {threads} -x $SCIF_DATA/{params} $SCIF_DATA/{input} > $SCIF_DATA/{output}'")
 
@@ -61,7 +64,9 @@ rule make_bigwig:
     params:
         "chrom.sizes"
     shell:
-        "scif run makeUCSCfile '$SCIF_DATA/{input} -o auto -bigWig $SCIF_DATA/{params} -fsize 1e20 > $SCIF_DATA/{output}'"
+        """
+        scif run makeUCSCfile '$SCIF_DATA/{input} -o auto -bigWig $SCIF_DATA/{params} -fsize 1e20 > $SCIF_DATA/{output}'
+        """
 
 rule find_peaks:
     input:
