@@ -7,7 +7,7 @@ SAMPLES = list(set(SAMPLES))
 rule all:
     input:
         expand("tag_directories/{sample}/track_info.txt",sample=SAMPLES),
-        expand("tag_directories/{sample}/peaks.txt",sample=SAMPLES)
+        expand("tag_directories/{sample}/peaks.bed",sample=SAMPLES)
 
 def inputs(wildcards):
     if (config["paired_end"]):
@@ -77,3 +77,11 @@ rule find_peaks:
         config["peak_cmds"]
     shell:
         "scif run findPeaks '$SCIF_DATA/{input} -o $SCIF_DATA/{output} {params}'"
+
+rule convert_peaks:
+    input:
+        "tag_directories/{sample}/peaks.txt"
+    output:
+        "tag_directories/{sample}/peaks.bed"
+    shell:
+        "scif run pos2bed '$SCIF_DATA/{input} > $SCIF_DATA/{output}'"

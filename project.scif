@@ -60,6 +60,8 @@
         exec /scif/apps/makeTagDirectory/bin/makeUCSCfile "$@"
 %apprun findPeaks
         exec /scif/apps/makeTagDirectory/bin/findPeaks "$@"
+%apprun pos2bed
+        exec /scif/apps/makeTagDirectory/bin/pos2bed.pl "$@"
 
 %apphelp snakemake
 	    Run snakemake. The workflow is defined by a Snakefile that should be located in the $SCIF_DATA folder. This app does not provide snakemake itself, because it is already installed in the Singularity/Docker container. But it would be easy to install snakemake also in the app context. The Snakefile should be present in the folder. If not, we copy the one provided by the snakemake application.
